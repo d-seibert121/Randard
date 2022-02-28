@@ -8,7 +8,7 @@ Decklist = Counter_type[Cardname]
 from collections import Counter
 import mtgsdk
 import argparse
-from APIutils import all_sets
+from APIutils import ALL_TRUE_SETS
 
 MAX_CARDS_EXCEPTIONS = ('Relentless Rats', 'Rat Colony', 'Persistent Petitioners', 'Shadowborn Apostle',
                         'Plains', 'Island', 'Swamp', 'Mountain', 'Forest')
@@ -43,7 +43,7 @@ def verify_decklist(decklist: Decklist, legal_sets: Optional[Collection[Set_code
             errors.append(f'{card} has more than {max_cards} {"copies" if max_cards > 1 else "copy"}')
 
     if legal_sets is None:
-        legal_sets = set(set_.code for set_ in all_sets)  # default to all sets being legal
+        legal_sets = set(set_.code for set_ in ALL_TRUE_SETS)  # default to all sets being legal
     else:
         legal_sets = set(legal_sets)  # this is where I'll revise to allow for special formats
     sets_where_lookup_string = '|'.join(legal_sets)
