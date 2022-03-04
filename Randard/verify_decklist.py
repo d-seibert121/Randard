@@ -15,40 +15,71 @@ MAX_CARDS_EXCEPTIONS = ('Relentless Rats', 'Rat Colony', 'Persistent Petitioners
                         'Plains', 'Island', 'Swamp', 'Mountain', 'Forest')
 
 
-def decklist_parser(decklist_file: str | TextIO, string=False) -> Decklist:
-    """Parses a decklist string where each line is "Nx CARDNAME" converting that to Counter
-    where each key is the name of the card, and the values are the number of that card in the decklist"""
+def decklist_parser(decklist_file: str | TextIO, string=False) -> tuple[Decklist, Decklist]:
+    """Parses a decklist string where each line is "Nx CARDNAME"
+    returns a tuple of two Decklist objects (i.e. collections.Counters) that map card names to the number of that
+    card in the deck. The first Decklist is the maindeck, the second is the sideboard"""
     if string:
         lines = decklist_file.splitlines()
     else:
         with open(decklist_file, 'r') as f:
             lines = f.readlines()
-    decklist = Decklist()
-    for line in lines:
+    maindeck = Decklist()
+    sideboard = Decklist()
+    working_decklist = maindeck
+    for (idx, line) in enumerate(lines):
         num, *card_words = line.split()
         card_name = Cardname(' '.join(word.strip() for word in card_words))
-        num.strip('xX')
+        num = num.strip('xX')
         try:
             num = int(num)
         except ValueError:
-            raise SyntaxError('Each line in the file must start with an integer')
-        decklist[card_name] += 1
-    return decklist
+            if idx == 0 and str(num).lower().startswith('main'):
+                continue
+            elif str(num).lower().startswith('side'):
+                working_decklist = sideboard
+                continue
+            else:
+                raise SyntaxError(f'Each line in the file must start with an integer, line {idx+1} does not')
+        working_decklist[card_name] += num
+    return maindeck, sideboard
 
 
-def verify_decklist(decklist: Decklist, legal_sets: Collection[Set_code] | None = None, max_cards=4, min_deck_size=60) -> list[str] | bool:
-    """takes a decklist, as returned by decklist_parser, and returns True if that deck is valid for the
-    given maximum number of cards and legal sets, or a list of errors otherwise"""
+def verify_decklist(decklist: Decklist, sideboard: Decklist | None = None, *args, legal_sets: Collection[Set_code] | None = None,
+                    max_cards=4, min_deck_size=60, max_deck_size=None, min_sideboard_size=0, max_sideboard_size=15) -> list[str] | bool:
+    """takes a decklist or pair of decklists representing maindeck and sideboard, as returned by decklist_parser
+    returns True if that deck is valid for the given maximum number of cards and legal sets, or a list of errors otherwise"""
 
     errors = []
+
+    match (decklist, sideboard):
+        case (Counter(), None):
+            deck_size = decklist.total()
+            if deck_size < min_deck_size:
+                errors.append(f"Deck has less than {min_deck_size} cards")
+            elif max_deck_size and deck_size > max_deck_size:
+                errors.append(f"Deck has more than {max_deck_size} cards")
+        case (Counter(), Counter()):
+            deck_size = decklist.total()
+            sideboard_size = sideboard.total()
+            if deck_size < min_deck_size:
+                errors.append(f"Deck has less than {min_deck_size} cards")
+            elif deck_size > max_deck_size:
+                errors.append(f"Deck has more than {max_deck_size} cards")
+            if sideboard_size < min_sideboard_size:
+                errors.append(f"Sideboard has less than {min_sideboard_size} cards")
+            elif sideboard_size > max_sideboard_size:
+                errors.append(f"Sideboard has more than {max_sideboard_size} cards")
+            decklist = decklist + sideboard
+        case _:
+            raise TypeError(f"verify_decklist positional arguments must be of type collections.Counter, had type {[type(decklist), type(sideboard)]}")
 
     for card, num in decklist.most_common():
         if num <= max_cards:
             break
         if card not in MAX_CARDS_EXCEPTIONS:
             errors.append(f'{card} has more than {max_cards} {"copies" if max_cards > 1 else "copy"}')
-    if sum(decklist.values()) < min_deck_size:
-        errors.append(f"Deck has less than {min_deck_size} cards")
+
     if legal_sets is not None:
         legal_sets = set(legal_sets)  # this is where I'll revise to allow for special formats
     else:
@@ -74,7 +105,7 @@ def main():
 
     with open(argument_file, 'r') as decklist_file:
         decklist = decklist_parser(decklist_file)
-    return verify_decklist(decklist, sets)
+    return verify_decklist(*decklist, legal_sets=sets)
 
 
 def test_unique_sets(cards: dict[str, set[Set_code]]) -> dict[Cardname, Set_code] | None:
@@ -112,5 +143,5 @@ def test_unique_sets(cards: dict[str, set[Set_code]]) -> dict[Cardname, Set_code
 
 
 if __name__ == '__main__':
-    #main()
+    # main()
     pass

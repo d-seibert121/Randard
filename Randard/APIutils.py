@@ -5,10 +5,10 @@ import mtgsdk
 
 USEFUL_SUPPLEMENTAL_SET_TYPES = ("reprint", "un", "commander", "planechase", "archenemy", "vanguard", "masters")
 
-ALL_SETS: set[Set] = Set.all()
-CORE_SETS: set[Set] = {set_ for set_ in ALL_SETS if set_.type == 'core'}
-EXPERT_SETS: set[Set] = {set_ for set_ in ALL_SETS if set_.type == 'expansion'}
-ALL_TRUE_SETS: set[Set] = CORE_SETS | EXPERT_SETS
+ALL_SETS: list[Set] = Set.all()
+CORE_SETS: list[Set] = [set_ for set_ in ALL_SETS if set_.type == 'core']
+EXPERT_SETS: list[Set] = [set_ for set_ in ALL_SETS if set_.type == 'expansion']
+ALL_TRUE_SETS: list[Set] = CORE_SETS + EXPERT_SETS
 
 
 def sets_in(card_name: str):
