@@ -45,7 +45,7 @@ def decklist_parser(decklist_file: str | TextIO, string=False) -> tuple[Decklist
     return maindeck, sideboard
 
 
-def verify_decklist(decklist: Decklist, sideboard: Decklist | None = None, *args, legal_sets: Collection[Set_code] | None = None,
+def verify_decklist(decklist: Decklist, sideboard: Decklist | None = None, *, legal_sets: Collection[Set_code] | None = None,
                     max_cards=4, min_deck_size=60, max_deck_size=None, min_sideboard_size=0, max_sideboard_size=15) -> list[str] | bool:
     """takes a decklist or pair of decklists representing maindeck and sideboard, as returned by decklist_parser
     returns True if that deck is valid for the given maximum number of cards and legal sets, or a list of errors otherwise"""

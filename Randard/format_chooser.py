@@ -3,17 +3,11 @@ __author__ = "Duncan Seibert"
 from Randard.APIutils import ALL_TRUE_SETS
 from random import sample, randint
 from mtgsdk import Set
-from private_info import SET_FILE_LOC
+from private_info import SET_FILE_LOC, DB_LOC
 from typing import NewType
-import json
+import sqlite3
 
 Set_code = NewType('Set_code', str)
-
-try:
-    with open(SET_FILE_LOC, 'r') as f:
-        info = json.load(f)
-except FileNotFoundError:
-    info = {'names': [], 'codes': []}
 
 
 def generate_format(format_size=None) -> list[Set]:
@@ -23,15 +17,10 @@ def generate_format(format_size=None) -> list[Set]:
     return randard_format
 
 
-def scryfall_search(sets=None):
-    if sets is None:
-        sets = info["codes"]
-    return f'(s:{ " or s:".join(repr(set_) for set_ in sets)})'
-
-
 if __name__ == '__main__':
     new_format = generate_format()
-    set_names = [set_.name for set_ in new_format]
-    set_codes = [set_.code for set_ in new_format]
-    with open(SET_FILE_LOC, 'w') as f:
-        json.dump({"names": set_names, "codes": set_codes}, f)
+
+    with sqlite3.connect(DB_LOC) as con:
+        con.execute("CREATE TABLE IF NOT EXISTS current_sets (id INTEGER PRIMARY KEY, name TEXT, code TEXT)")
+        con.execute("DELETE FROM current_sets")
+        con.executemany("INSERT INTO current_sets (name, code) VALUES (?, ?)", ((set_.name, set_.code) for set_ in new_format))
