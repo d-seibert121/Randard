@@ -1,9 +1,19 @@
 __author__ = "Duncan Seibert"
 
+from collections import Counter
+from typing import NewType
 from mtgsdk import Set
 import mtgsdk
 import sqlite3
 from private_info import DB_LOC
+
+
+Set_code = NewType('Set_code', str)
+Set_name = NewType('Set_Name', str)
+Block = NewType('Block', str)
+Cardname = NewType('Cardname', str)
+Decklist = Counter[Cardname]
+
 
 USEFUL_SUPPLEMENTAL_SET_TYPES = ("reprint", "un", "commander", "planechase", "archenemy", "vanguard", "masters")
 
@@ -21,6 +31,8 @@ def sets_in(card_name: str):
 def scryfall_search(sets=None):
     if sets is None:
         with sqlite3.connect(DB_LOC) as con:
-            cur = con.execute("SELECT code FROM current_sets")
-            sets = [item[0] for item in cur.fetchall()]
-    return f'(s:{ " or s:".join(repr(set_) for set_ in sets)})'
+            cur = con.execute("SELECT set_codes FROM seasons ORDER BY CAST(season_number AS REAL) DESC")
+            sets = cur.fetchone()[0].split(', ')
+    return f'(s:{ " or s:".join(set_ for set_ in sets)})'
+
+

@@ -3,16 +3,15 @@ __author__ = "Duncan Seibert"
 import mtgsdk
 import argparse
 from collections import Counter, defaultdict
-from Randard.APIutils import ALL_TRUE_SETS
-from typing import Collection, NewType, TextIO
-
-Cardname = NewType('Cardname', str)
-Set_code = NewType('Set_code', str)
-Decklist = Counter[Cardname]
-
+from Randard.APIutils import ALL_TRUE_SETS, Cardname, Decklist, Set_code
+from typing import Collection, TextIO
 
 MAX_CARDS_EXCEPTIONS = ('Relentless Rats', 'Rat Colony', 'Persistent Petitioners', 'Shadowborn Apostle',
                         'Plains', 'Island', 'Swamp', 'Mountain', 'Forest')
+
+
+class DecklistError(SyntaxError):
+    pass
 
 
 def decklist_parser(decklist_file: str | TextIO, string=False) -> tuple[Decklist, Decklist]:
@@ -28,19 +27,20 @@ def decklist_parser(decklist_file: str | TextIO, string=False) -> tuple[Decklist
     sideboard = Decklist()
     working_decklist = maindeck
     for (idx, line) in enumerate(lines):
+        if not line.strip():
+            continue  # skips blank lines
         num, *card_words = line.split()
         card_name = Cardname(' '.join(word.strip() for word in card_words))
         num = num.strip('xX')
+        if idx == 0 and 'deck' in str(num).lower():
+            continue
+        elif 'side' in str(num).lower():
+            working_decklist = sideboard
+            continue
         try:
             num = int(num)
         except ValueError:
-            if idx == 0 and str(num).lower().startswith('main'):
-                continue
-            elif str(num).lower().startswith('side'):
-                working_decklist = sideboard
-                continue
-            else:
-                raise SyntaxError(f'Each line in the file must start with an integer, line {idx+1} does not')
+            raise DecklistError(f'Each line in the file, except for maindeck and sideboard headings, must start with an integer; line {idx+1} does not')
         working_decklist[card_name] += num
     return maindeck, sideboard
 
@@ -64,7 +64,7 @@ def verify_decklist(decklist: Decklist, sideboard: Decklist | None = None, *, le
             sideboard_size = sideboard.total()
             if deck_size < min_deck_size:
                 errors.append(f"Deck has less than {min_deck_size} cards")
-            elif deck_size > max_deck_size:
+            elif max_deck_size and deck_size > max_deck_size:
                 errors.append(f"Deck has more than {max_deck_size} cards")
             if sideboard_size < min_sideboard_size:
                 errors.append(f"Sideboard has less than {min_sideboard_size} cards")

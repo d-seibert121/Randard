@@ -1,13 +1,10 @@
 __author__ = "Duncan Seibert"
 
-from Randard.APIutils import ALL_TRUE_SETS
+from Randard.APIutils import ALL_TRUE_SETS, Set_code
 from random import sample, randint
 from mtgsdk import Set
-from private_info import SET_FILE_LOC, DB_LOC
-from typing import NewType
+from private_info import DB_LOC
 import sqlite3
-
-Set_code = NewType('Set_code', str)
 
 
 def generate_format(format_size=None) -> list[Set]:

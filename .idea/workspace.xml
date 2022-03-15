@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="">
+    <list default="true" id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="\scryfall now responds with a url to scryfall that searches for the currently legal sets, instead of making the user copy-paste the search string into scryfall themselves&#10;\verify now calls inter.response.defer, because it took *just* over 3 seconds to respond, which was causing a timeout&#10;\register now responds with an ephemeral confirmation&#10;Began work on a quarterly_update task that will do all the season maintenance">
+      <change afterPath="$PROJECT_DIR$/RandardDiscordBot/BotLauncher.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Randard/APIutils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Randard/APIutils.py" afterDir="false" />
@@ -18,6 +20,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -44,7 +53,21 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.general" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="terminal" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="Randard" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="Randard" />
+      </console-settings>
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\dseib\PycharmProjects\Randard" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.BotMain">
     <configuration name="BotMain" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -60,6 +83,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RandardDiscordBot/BotMain.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Randard" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/__init__.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -113,6 +157,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.BotMain" />
+        <item itemvalue="Python.__init__" />
         <item itemvalue="Python.format_chooser" />
       </list>
     </recent_temporary>
@@ -133,11 +178,23 @@
       <option name="project" value="LOCAL" />
       <updated>1646503983312</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Switched to using sqlite3 instead of json to keep track of current sets.&#10;Added player-facing functionality, including player registration and player ratings which can be updated by recording game results&#10;Moved scryfall_search into APIutils">
+      <created>1647150140418</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1647150140418</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.bat" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fixing .idea" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing .idea" />
+    <MESSAGE value="Switched to using sqlite3 instead of json to keep track of current sets.&#10;Added player-facing functionality, including player registration and player ratings which can be updated by recording game results&#10;Moved scryfall_search into APIutils" />
+    <MESSAGE value="\scryfall now responds with a url to scryfall that searches for the currently legal sets, instead of making the user copy-paste the search string into scryfall themselves&#10;\verify now calls inter.response.defer, because it took *just* over 3 seconds to respond, which was causing a timeout&#10;\register now responds with an ephemeral confirmation&#10;Began work on a quarterly_update task that will do all the season maintenance" />
+    <option name="LAST_COMMIT_MESSAGE" value="\scryfall now responds with a url to scryfall that searches for the currently legal sets, instead of making the user copy-paste the search string into scryfall themselves&#10;\verify now calls inter.response.defer, because it took *just* over 3 seconds to respond, which was causing a timeout&#10;\register now responds with an ephemeral confirmation&#10;Began work on a quarterly_update task that will do all the season maintenance" />
   </component>
 </project>
