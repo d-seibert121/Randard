@@ -1,3 +1,4 @@
+import dataclasses
 import Randard
 from private_info import TOKEN, TEST_GUILDS, DB_LOC
 import disnake
@@ -19,6 +20,15 @@ async def get_player_role(guild: disnake.Guild):
         if role.name.lower() == 'player':
             return role
     return guild.create_role(name="player", colour=disnake.Colour.random(), hoist=True, mentionable=True)
+
+
+async def get_match_results_channel(guild: disnake.Guild) -> disnake.TextChannel:
+    for channel in guild.channels:
+        if channel.name.lower() == 'match-results':
+            return channel
+    permissions = {role: disnake.PermissionOverwrite(send_messages=False) for role in guild.roles}
+    permissions[bot.user] = disnake.PermissionOverwrite(send_messages=True)
+    return await guild.create_text_channel('match-results', topic='The bot posts verified game results here', overwrites=permissions)
 
 
 def get_legal_set_names_and_codes(database=DB_LOC) -> tuple[list[Set_name], list[Set_code]]:
@@ -85,92 +95,112 @@ async def verify(inter: disnake.AppCommandInteraction,
         await inter.send("There were some problems with your list:\n" + '\n'.join(verification))
 
 
-def handle_confirmed_game(user: disnake.Member, opponent: disnake.Member, games_won: int, games_lost: int, ties: int = 0):
+@dataclasses.dataclass
+class PendingGame:
+    submitter: disnake.Member
+    opponent: disnake.Member
+    submitter_games_won: int
+    opponent_games_won: int
+    ties: int = 0
+    closed: bool = False
+
+    @property
+    def summary_string(self):
+        ties_substring = f', {self.ties} tie{"s" * (self.ties > 1)}' if self.ties else ''
+        return f"Results: {self.submitter.name} {self.submitter_games_won}, {self.opponent.name} {self.opponent_games_won}{ties_substring}"
+
+    @property
+    def total_games(self):
+        return self.submitter_games_won + self.opponent_games_won + self.ties
+
+
+class GameClosedError(ValueError):
+    pass
+
+
+def handle_confirmed_game(game: PendingGame):
+    if game.closed:
+        raise GameClosedError("That game is closed")
+
     k = 40  # ELO constant. Higher k means scores change faster, 40 is rather high
 
-    total_games = games_won + games_lost + ties
-    games_won += ties / 2
-    games_lost += ties / 2
+    total_games = game.total_games
+    games_won = game.submitter_games_won + (game.ties / 2)
+    games_lost = game.opponent_games_won + (game.ties / 2)
 
     with sqlite3.connect(DB_LOC) as con:
-        cur = con.execute("SELECT rating FROM players WHERE discord_id=?", [user.id])
-        user_rating = cur.fetchone()
-        if user_rating is None:
+        cur = con.execute("SELECT rating FROM players WHERE discord_id=?", [game.submitter.id])
+        submitter_rating = cur.fetchone()
+        if submitter_rating is None:
             raise UserNotRegisteredError("User is not registered")
         else:
-            user_rating = user_rating[0]
-        cur = con.execute("SELECT rating FROM players WHERE discord_id=?", [opponent.id])
+            submitter_rating = submitter_rating[0]
+        cur = con.execute("SELECT rating FROM players WHERE discord_id=?", [game.opponent.id])
         opponent_rating = cur.fetchone()
         if opponent_rating is None:
             raise UserNotRegisteredError("Opponent is not registered")
         else:
             opponent_rating = opponent_rating[0]
 
-        user_expected_score = total_games/(1+10**((opponent_rating-user_rating)/400))
-        opponent_expected_score = total_games-user_expected_score
+        submitter_expected_score = total_games/(1+10**((opponent_rating-submitter_rating)/400))
+        opponent_expected_score = total_games-submitter_expected_score
 
-        user_rating_change = k*(games_won - user_expected_score)
+        submitter_rating_change = k*(games_won - submitter_expected_score)
         opponent_rating_change = k*(games_lost - opponent_expected_score)
 
-        user_rating += user_rating_change
+        submitter_rating += submitter_rating_change
         opponent_rating += opponent_rating_change
 
         con.executemany("UPDATE players SET rating=:rating WHERE discord_id=:id",
-                        [{'id': user.id, 'rating': user_rating}, {'id': opponent.id, 'rating': opponent_rating}])
+                        [{'id': game.submitter.id, 'rating': submitter_rating}, {'id': game.opponent.id, 'rating': opponent_rating}])
 
 
-class GameCommandView(disnake.ui.View):
-    def __init__(self, user: disnake.Member, opponent: disnake.Member, user_score: int, opponent_score: int):
+class GameCommandViewOpponent(disnake.ui.View):
+    def __init__(self, game_submission: PendingGame):
         super().__init__()
-        self.user = user
-        self.opponent = opponent
-        self.user_score = user_score
-        self.opponent_score = opponent_score
-        self.rejected = False
-        self.confirmed = False
+        self.game = game_submission
 
-    __slots__ = ('user', 'opponent', 'user_score', 'opponent_score', 'rejected', 'confirmed')
+    __slots__ = ('confirm', 'cancel', 'game')
 
     @disnake.ui.button(label="Confirm", style=disnake.ButtonStyle.green)
     async def confirm(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
-        if self.rejected:
-            await inter.send("This game was rejected by the opponent. Please resubmit the game")
+        try:
+            handle_confirmed_game(self.game)
+        except GameClosedError:
+            await inter.send("That game is closed, either because you already accepted it, or it was canceled by the submitter.")
             return
-        if self.confirmed:
-            await inter.send("This game was already confirmed and tallied", ephemeral=True)
-            return
-        if inter.user == self.opponent:
-            await inter.send("Registering the game!", ephemeral=True)
-            try:
-                handle_confirmed_game(self.user, self.opponent, self.user_score, self.opponent_score)
-            except UserNotRegisteredError as err:
-                await inter.send(err.args[0])
-            else:
-                self.confirmed = True
-                self.stop()
-            return
-        else:
-            await inter.send("Hey, that button wasn't for you. Only the game's listed opponent should click the button", ephemeral=True)
+        results_channel = await get_match_results_channel(self.game.submitter.guild)
+        await results_channel.send(f'A game has been completed!\n {self.game.summary_string}')
+        self.game.closed = True
+        self.stop()
 
     @disnake.ui.button(label="Cancel", style=disnake.ButtonStyle.red)
     async def cancel(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
-        if self.confirmed or self.rejected:
-            await inter.send('This game is already closed', ephemeral=True)
-        elif inter.user == self.opponent:
-            await inter.send("I'm sorry to hear there's a problem with this submission. \n"
-                             "Either you or your opponent should resubmit the game once you agree on the results")
-            self.rejected = True
-            self.stop()
-        elif inter.user == self.user:
-            await inter.send("Alright, game cancelled", ephemeral=True)
-        else:
-            await inter.send("Hey, that button wasn't for you. Only the game's listed opponent should click the button", ephemeral=True)
+        self.game.closed = True
+        self.stop()
+        await inter.send("This game is now closed, without being recorded.")
 
 
-@bot.slash_command(description="Record a game!")
-async def game(inter: disnake.AppCommandInteraction, opponent: disnake.Member, submitter_score: int, opponent_score: int, ties: int = 0):
+class GameCommandViewSubmitter(disnake.ui.View):
+    def __init__(self, game_submission: PendingGame):
+        super().__init__()
+        self.game = game_submission
+
+    __slots__ = ('cancel', 'game')
+
+    @disnake.ui.button(label="cancel", style=disnake.ButtonStyle.red)
+    async def cancel(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
+        self.game.closed = True
+        self.stop()
+        await inter.send("This game is now closed, without being recorded.")
+
+
+@bot.slash_command(name='game', description="Record a game!")
+async def game_command(inter: disnake.AppCommandInteraction, opponent: disnake.Member, submitter_score: int, opponent_score: int, ties: int = 0):
     # TODO Make the buttons only display to the opponent/ DM the buttons
     # TODO Update the command invocation when the opponent responds
+
+    # check roles as a quick catch for unregistered players
     player_role = await get_player_role(inter.guild)
     if player_role not in inter.user.roles:
         await inter.send("You must /register before submitting a game.", ephemeral=True)
@@ -181,9 +211,14 @@ async def game(inter: disnake.AppCommandInteraction, opponent: disnake.Member, s
     if opponent == inter.user:
         await inter.send("Despite the meme, you can't play yourself", ephemeral=True)
         return
-    view = GameCommandView(inter.user, opponent, submitter_score, opponent_score)
-    await inter.send(f"Results: {inter.user.mention} won {submitter_score} games, {opponent.mention} won {opponent_score} games, and there were {ties} ties.\n"
-                     f"Your opponent needs to confirm before I record these results.", view=view)
+
+    game_submission = PendingGame(inter.user, opponent, submitter_score, opponent_score, ties)
+
+    submitter_view = GameCommandViewSubmitter(game_submission)
+    opponent_view = GameCommandViewOpponent(game_submission)
+
+    await opponent.send(f"A game has been submitted listing you as the opponent. {game_submission.summary_string}", view=opponent_view)
+    await inter.send("Your opponent has been messaged to verify this game. If you would like to cancel, click this button.", view=submitter_view, ephemeral=True)
 
 
 @bot.slash_command(description="Registers you to the Randard league")
