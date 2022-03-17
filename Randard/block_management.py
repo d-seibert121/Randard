@@ -1,7 +1,8 @@
 __author__ = "Duncan Seibert"
 
-from mtgsdk import Set
 from collections import defaultdict
+
+from mtgsdk import Set
 
 from Randard.APIutils import Block
 

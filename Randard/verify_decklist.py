@@ -1,10 +1,12 @@
 __author__ = "Duncan Seibert"
 
-import mtgsdk
 import argparse
 from collections import Counter, defaultdict
-from Randard.APIutils import ALL_TRUE_SETS, Cardname, Decklist, Set_code
 from typing import Collection, TextIO
+
+import mtgsdk
+
+from Randard.APIutils import ALL_TRUE_SETS, Cardname, Decklist, Set_code
 
 MAX_CARDS_EXCEPTIONS = ('Relentless Rats', 'Rat Colony', 'Persistent Petitioners', 'Shadowborn Apostle',
                         'Plains', 'Island', 'Swamp', 'Mountain', 'Forest')
