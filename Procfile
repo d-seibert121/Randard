@@ -1,1 +1,1 @@
-worker: python3 BotMain.py
+worker: `python3 BotMain.py`

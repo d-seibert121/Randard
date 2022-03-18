@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/runtime.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,7 +250,14 @@
       <option name="project" value="LOCAL" />
       <updated>1647586874505</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added Procfile and runtime.txt for heroku">
+      <created>1647588441291</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1647588441291</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -269,6 +273,7 @@
     <MESSAGE value="Major restructure. Removed the two different packages, now all the files are under the one RandardDiscordBot package.&#10;The previous database_management.py functions are now methods of the RandardBot class, and several more database-wrapper methods were added. The bot now uses a different database for each guild. These methods either require an explicit guild argument to determine which database to use, or derives the guild implicitly from a passed-in disnake.Member." />
     <MESSAGE value="Bugfixes&#10;Bot now no longer uses test_guilds and instead uses global registration." />
     <MESSAGE value="Flattened directory structure due to no longer having two packages" />
-    <option name="LAST_COMMIT_MESSAGE" value="Flattened directory structure due to no longer having two packages" />
+    <MESSAGE value="Added Procfile and runtime.txt for heroku" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Procfile and runtime.txt for heroku" />
   </component>
 </project>
