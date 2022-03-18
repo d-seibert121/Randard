@@ -7,17 +7,8 @@
     <list default="true" id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Randard/APIutils.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/APIutils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Randard/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Randard/block_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/block_management.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Randard/database_management.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Randard/format_chooser.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/format_chooser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Randard/verify_decklist.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/decklist_verification.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RandardDiscordBot/BotMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/BotMain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RandardDiscordBot/RandardBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/RandardBot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RandardDiscordBot/quarterly_update.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/quarterly_update.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/decklist_tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/decklist_tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -240,7 +231,14 @@
       <option name="project" value="LOCAL" />
       <updated>1647532409735</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Major restructure. Removed the two different packages, now all the files are under the one RandardDiscordBot package.&#10;The previous database_management.py functions are now methods of the RandardBot class, and several more database-wrapper methods were added. The bot now uses a different database for each guild. These methods either require an explicit guild argument to determine which database to use, or derives the guild implicitly from a passed-in disnake.Member.">
+      <created>1647570604687</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1647570604687</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -253,6 +251,7 @@
     <MESSAGE value="Added some helper functions for working with the database, in line with DRY&#10;/register now adds a 'player' role to the registered member, adding the role to the guild if necessary&#10;A number of functions now take discord.Member parameters instead of discord.User, since I care about roles now.&#10;Moved all the Typing types to APIutils.py" />
     <MESSAGE value="Redesigned the /game interface so as not to put buttons in front of users that can't use them. &#10;Now only shows the results of confirmed games to everyone, through the use of a read-only (but bot-writable) channel called match-results." />
     <MESSAGE value="Added the quarterly league maintenance. The bot will compile the previous season's leaderboard, store a copy of the leaderboard as a new table in the DB, generate a new format, and post the new format and leaderboard in the server's announcements channel.&#10;To facilitate the above change, a disnake Bot subclass, RandardBot was created in it's own module. This class has methods for fetching the necessary roles and channels from a specified guild.&#10;Reorganized most of the database handling into the new database_management.py. This module absorbed several functions from both Randard and RandardDiscordBot, plus most of the loose calls to the database have been wrapped in functions and put there." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the quarterly league maintenance. The bot will compile the previous season's leaderboard, store a copy of the leaderboard as a new table in the DB, generate a new format, and post the new format and leaderboard in the server's announcements channel.&#10;To facilitate the above change, a disnake Bot subclass, RandardBot was created in it's own module. This class has methods for fetching the necessary roles and channels from a specified guild.&#10;Reorganized most of the database handling into the new database_management.py. This module absorbed several functions from both Randard and RandardDiscordBot, plus most of the loose calls to the database have been wrapped in functions and put there." />
+    <MESSAGE value="Major restructure. Removed the two different packages, now all the files are under the one RandardDiscordBot package.&#10;The previous database_management.py functions are now methods of the RandardBot class, and several more database-wrapper methods were added. The bot now uses a different database for each guild. These methods either require an explicit guild argument to determine which database to use, or derives the guild implicitly from a passed-in disnake.Member." />
+    <option name="LAST_COMMIT_MESSAGE" value="Major restructure. Removed the two different packages, now all the files are under the one RandardDiscordBot package.&#10;The previous database_management.py functions are now methods of the RandardBot class, and several more database-wrapper methods were added. The bot now uses a different database for each guild. These methods either require an explicit guild argument to determine which database to use, or derives the guild implicitly from a passed-in disnake.Member." />
   </component>
 </project>

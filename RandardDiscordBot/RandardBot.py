@@ -15,11 +15,15 @@ class UserNotRegisteredError(sqlite3.DatabaseError):
 
 
 class RandardBot(commands.Bot):
-    def on_ready(self):
+    async def on_ready(self):
         today = datetime.date.today()
         for guild in self.guilds:
             await self._setup(guild, date=today)
-        print("All guild set up and good to go!")
+        print("All guilds set up and good to go!")
+
+    async def on_guild_join(self, guild: disnake.Guild):
+        print(f"joined {guild.name} with id {guild.id}")
+        await self._setup(guild, date=datetime.date.today())
 
     async def _setup(self, guild: disnake.Guild, date: datetime.date):
         """Ensures that all necessary database tables exist. If they don't exist, create them with the correct fields.
@@ -27,6 +31,8 @@ class RandardBot(commands.Bot):
         Also ensures that the Players role and announcements channel exist, bot will create the match-results channel when the first game is completed.
         """
         db_path = self._database_for(guild)
+        player_role = await self.get_player_role(guild)
+        announcements_channel = await self.get_announcements_channel(guild)
         with sqlite3.connect(db_path) as con:
             con.row_factory = sqlite3.Row
             cur = con.execute("SELECT * FROM sqlite_schema WHERE type='table'")
@@ -42,9 +48,8 @@ class RandardBot(commands.Bot):
                 set_codes = self.codes_string(new_format)
                 set_names = self.names_string(new_format)
                 # this INSERT INTO can't just defer to self.store_format because it sets the season_number to 0
-                con.execute("INSERT INTO seasons(season_number, month, year, set_names, set_codes) VALUES (0, ?, ?, ?, ?)", [f'{date:%B}', date.year, set_codes, set_names])
-                player_role = await self.get_player_role(guild)
-                announcements_channel = await self.get_announcements_channel(guild)
+                con.execute("INSERT INTO seasons(season_number, month, year, set_names, set_codes) VALUES (0, ?, ?, ?, ?)", [f'{date:%B}', date.year, set_names, set_codes])
+
                 announcement_header = f"Attention {player_role.mention}s! Welcome to the preliminary season of Randard! Your legal sets for this season are:\n"
                 format_message = '\n'.join(f'    {set_.name}' for set_ in new_format)
                 signoff = '\nHappy Deckbuilding!'
@@ -179,5 +184,5 @@ class RandardBot(commands.Bot):
 
     def scryfall_search(self, guild: disnake.Guild, sets=None):
         if sets is None:
-            sets = self.get_current_season(guild)
+            sets = self.get_legal_set_codes(guild)
         return f'(s:{ " or s:".join(set_ for set_ in sets)})'

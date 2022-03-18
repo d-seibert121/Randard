@@ -6,11 +6,11 @@ from disnake.ext import commands
 
 import quarterly_update
 from RandardDiscordBot.RandardBot import RandardBot, UserNotRegisteredError
-from RandardDiscordBot.private_info import TOKEN, TEST_GUILDS
+from RandardDiscordBot.private_info import TOKEN
 import decklist_verification
 
 
-bot = RandardBot(command_prefix="$", test_guilds=TEST_GUILDS)
+bot = RandardBot()
 bot.add_cog(quarterly_update.RandardMaintenanceCog(bot))
 
 
@@ -205,7 +205,7 @@ async def register(inter: disnake.AppCommandInteraction):
     if registration is True:
         await inter.send("You're all registered!", ephemeral=True)
         return
-    registration_date = datetime.date.fromisoformat(registration['date'])
+    registration_date = datetime.date.fromisoformat(registration['registration_date'])
     await inter.send(f"Looks like you registered back on {registration_date:%x}", ephemeral=True)
 
 
@@ -219,14 +219,14 @@ async def rating(inter: disnake.AppCommandInteraction):
     await inter.send(f"{inter.user.mention}, your current rating is {rating}")
 
 
-@bot.slash_command()
-async def test_update(inter: disnake.AppCommandInteraction):
-    if inter.user != bot.owner:
-        await inter.send("This is only for testing, and only my owner can use it.", ephemeral=True)
-        return
-    guild = bot.guilds[0]
-    # noinspection PyTypeChecker
-    cog: quarterly_update.RandardMaintenanceCog = bot.get_cog("RandardMaintenanceCog")
-    await cog.quarterly_update(guild)
+# @bot.slash_command()
+# async def test_update(inter: disnake.AppCommandInteraction):
+#     if inter.user != bot.owner:
+#         await inter.send("This is only for testing, and only my owner can use it.", ephemeral=True)
+#         return
+#     guild = bot.guilds[0]
+#     # noinspection PyTypeChecker
+#     cog: quarterly_update.RandardMaintenanceCog = bot.get_cog("RandardMaintenanceCog")
+#     await cog.quarterly_update(guild)
 
 bot.run(TOKEN)
