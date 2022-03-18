@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/runtime.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RandardDiscordBot/BotMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/BotMain.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RandardDiscordBot/RandardBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/RandardBot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RandardDiscordBot/block_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/block_management.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RandardDiscordBot/decklist_verification.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/decklist_verification.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RandardDiscordBot/format_chooser.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/format_chooser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +52,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/RandardDiscordBot" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="terminal" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -71,6 +69,7 @@
       <recent name="C:\Users\dseib\PycharmProjects\Randard" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\dseib\PycharmProjects\Randard" />
       <recent name="C:\Users\dseib\PycharmProjects\Randard\RandardDiscordBot" />
     </key>
   </component>
@@ -247,7 +246,14 @@
       <option name="project" value="LOCAL" />
       <updated>1647584612593</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Flattened directory structure due to no longer having two packages">
+      <created>1647586874505</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1647586874505</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -262,6 +268,7 @@
     <MESSAGE value="Added the quarterly league maintenance. The bot will compile the previous season's leaderboard, store a copy of the leaderboard as a new table in the DB, generate a new format, and post the new format and leaderboard in the server's announcements channel.&#10;To facilitate the above change, a disnake Bot subclass, RandardBot was created in it's own module. This class has methods for fetching the necessary roles and channels from a specified guild.&#10;Reorganized most of the database handling into the new database_management.py. This module absorbed several functions from both Randard and RandardDiscordBot, plus most of the loose calls to the database have been wrapped in functions and put there." />
     <MESSAGE value="Major restructure. Removed the two different packages, now all the files are under the one RandardDiscordBot package.&#10;The previous database_management.py functions are now methods of the RandardBot class, and several more database-wrapper methods were added. The bot now uses a different database for each guild. These methods either require an explicit guild argument to determine which database to use, or derives the guild implicitly from a passed-in disnake.Member." />
     <MESSAGE value="Bugfixes&#10;Bot now no longer uses test_guilds and instead uses global registration." />
-    <option name="LAST_COMMIT_MESSAGE" value="Bugfixes&#10;Bot now no longer uses test_guilds and instead uses global registration." />
+    <MESSAGE value="Flattened directory structure due to no longer having two packages" />
+    <option name="LAST_COMMIT_MESSAGE" value="Flattened directory structure due to no longer having two packages" />
   </component>
 </project>
