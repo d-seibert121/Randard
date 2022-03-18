@@ -4,10 +4,8 @@ import datetime
 import disnake
 from disnake.ext import commands, tasks
 
-import Randard
-from Randard.database_management import store_format, store_leaderboard, clear_ratings, \
-    get_season_number
 from RandardBot import RandardBot
+from format_chooser import generate_format
 
 
 @dataclasses.dataclass
@@ -31,17 +29,17 @@ class RandardMaintenanceCog(commands.Cog):
             for guild in self.bot.guilds:
                 await self.quarterly_update(guild)
 
-    async def quarterly_update(self, guild: disnake.Guild):
+    async def quarterly_update(self: RandardBot, guild: disnake.Guild):
         ORDINALS = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"]
-        old_season_number = get_season_number()
-        leaderboard = store_leaderboard()
+        old_season_number = self.get_season_number(guild)
+        leaderboard = self.store_leaderboard(guild)
         leaderboard = [LeaderboardEntry(await guild.getch_member(player['discord_id']), player['rating']) for player in leaderboard]
-        clear_ratings()
-        new_format = Randard.generate_format()
-        store_format(new_format)
-        new_season_number = get_season_number()
-        player_role = await self.bot.get_player_role(guild)
-        announcements_channel = await self.bot.get_announcements_channel(guild)
+        self.clear_ratings(guild)
+        new_format = generate_format()
+        self.store_format(new_format, guild)
+        new_season_number = self.get_season_number(guild)
+        player_role = await self.get_player_role(guild)
+        announcements_channel = await self.get_announcements_channel(guild)
         header = f"Attention {player_role.mention}s!\nSeason {old_season_number} has ended, and season {new_season_number} is upon us.\nFirst, our leaderboard: \n"
         leaderboard_announcement = '\n'.join(f"{ORDINALS[i]} Place: {player.user.mention:}" for i, player in enumerate(leaderboard))
         new_format_header = '\n\nAnd now, our new format:\n'

@@ -1,44 +1,28 @@
 import dataclasses
 import datetime
-import sqlite3
 
 import disnake
 from disnake.ext import commands
 
-import Randard
-import Randard.database_management
 import quarterly_update
-from Randard.database_management import get_legal_set_names, get_legal_set_codes
-from RandardDiscordBot.RandardBot import RandardBot
-from private_info import TOKEN, TEST_GUILDS, DB_LOC
+from RandardDiscordBot.RandardBot import RandardBot, UserNotRegisteredError
+from RandardDiscordBot.private_info import TOKEN, TEST_GUILDS
+import decklist_verification
+
 
 bot = RandardBot(command_prefix="$", test_guilds=TEST_GUILDS)
 bot.add_cog(quarterly_update.RandardMaintenanceCog(bot))
 
 
-class UserNotRegisteredError(LookupError):
-    pass
-
-
-@bot.event
-async def on_ready():
-    legal_set_names, legal_sets = get_legal_set_names(), get_legal_set_codes()
-    print(f'I have logged into {[guild.name for guild in bot.guilds]}')
-    print(f'Currently legal sets are:')
-    print('\n'.join(set_ for set_ in legal_set_names))
-    print(f'And the codes are {legal_sets}')
-    print(f'My owner is {bot.owner.id}')
-
-
 @bot.slash_command(name='format', description="Displays the current legal sets")
 async def format_command(inter: disnake.AppCommandInteraction):
-    legal_set_names = get_legal_set_names()
+    legal_set_names = bot.get_legal_set_names(inter.guild)
     await inter.response.send_message("The current Randard sets are:\n" + '\n'.join(set_ for set_ in legal_set_names))
 
 
 @bot.slash_command(description="Gives you a search url for scryfall.com that only shows currently legal cards")
 async def scryfall(inter: disnake.AppCommandInteraction):
-    raw_search_string = Randard.database_management.scryfall_search()
+    raw_search_string = bot.scryfall_search(inter.guild)
     url = f'https://scryfall.com/search?q={raw_search_string.replace(" ", "+")}'
     await inter.response.send_message(url)
 
@@ -66,14 +50,14 @@ async def verify(inter: disnake.AppCommandInteraction,
     except UnicodeError:
         await inter.send("Oops, I can't read that. Please send me a .txt file, with utf-8 encoding. Try copying your decklist into Notepad and saving it from there.")
         return
-    set_codes = get_legal_set_codes()
+    set_codes = bot.get_legal_set_codes(inter.guild)
     try:
-        decklist = Randard.decklist_parser(f, string=True)
-    except Randard.DecklistError as err:
+        decklist = decklist_verification.decklist_parser(f, string=True)
+    except decklist_verification.DecklistError as err:
         await inter.send(err.args)
         return
 
-    verification = Randard.verify_decklist(*decklist, legal_sets=set_codes)
+    verification = decklist_verification.verify_decklist(*decklist, legal_sets=set_codes)
     if verification is True:
         await inter.send("Verified!")
     else:
@@ -122,34 +106,24 @@ class PendingGame:
         games_won = self.submitter_games_won + (self.ties / 2)
         games_lost = self.opponent_games_won + (self.ties / 2)
 
-        with sqlite3.connect(DB_LOC) as con:
-            cur = con.execute("SELECT rating FROM players WHERE discord_id=?", [self.submitter.id])
-            submitter_rating = cur.fetchone()
-            if submitter_rating is None:
-                raise UserNotRegisteredError("User is not registered")
-            else:
-                submitter_rating = submitter_rating[0]
-            cur = con.execute("SELECT rating FROM players WHERE discord_id=?", [self.opponent.id])
-            opponent_rating = cur.fetchone()
-            if opponent_rating is None:
-                raise UserNotRegisteredError("Opponent is not registered")
-            else:
-                opponent_rating = opponent_rating[0]
+        submitter_rating = bot.get_player_rating(self.submitter)
+        opponent_rating = bot.get_player_rating(self.opponent)
 
-            submitter_expected_score = total_games/(1+10**((opponent_rating-submitter_rating)/400))
-            opponent_expected_score = total_games-submitter_expected_score
+        submitter_expected_score = total_games/(1+10**((opponent_rating-submitter_rating)/400))
+        opponent_expected_score = total_games-submitter_expected_score
 
-            submitter_rating_change = k*(games_won - submitter_expected_score)
-            opponent_rating_change = k*(games_lost - opponent_expected_score)
+        submitter_rating_change = k*(games_won - submitter_expected_score)
+        opponent_rating_change = k*(games_lost - opponent_expected_score)
 
-            submitter_rating += submitter_rating_change
-            opponent_rating += opponent_rating_change
+        submitter_rating += submitter_rating_change
+        opponent_rating += opponent_rating_change
 
-            con.executemany("UPDATE players SET rating=:rating WHERE discord_id=:id",
-                            [{'id': self.submitter.id, 'rating': int(submitter_rating)}, {'id': self.opponent.id, 'rating': int(opponent_rating)}])
+        bot.update_player_rating(self.submitter, submitter_rating)
+        bot.update_player_rating(self.opponent, opponent_rating)
+
         self.closed = True
-        await self.opponent_message.edit(content=f"{self.opponent_message.content}\nThis game has been tallied.",
-                                         view=None)
+        await self.opponent_message.edit(content=f"{self.opponent_message.content}\nThis game has been tallied.", view=None)
+        await self.submitter_interaction.edit_original_message(content=f"{self.opponent_message.content}\nThis game has been tallied.", view=None)
 
 
 class GameClosedError(ValueError):
@@ -169,6 +143,8 @@ class GameCommandViewOpponent(disnake.ui.View):
         except GameClosedError:
             await inter.send("That game is closed, either because you already accepted it or canceled it, or it was canceled by the submitter.")
             return
+        except UserNotRegisteredError as err:
+            await inter.send(err.args[0])
         await self.game.submitter_interaction.edit_original_message(content=f"{inter.message.content}\nThis game has been submitted.", view=None)
         results_channel = await bot.get_match_results_channel(self.game.submitter.guild)
         await results_channel.send(f'A game has been completed!\n {self.game.summary_string}')
@@ -223,33 +199,24 @@ async def game_command(inter: disnake.AppCommandInteraction,
 
 @bot.slash_command(description="Registers you to the Randard league")
 async def register(inter: disnake.AppCommandInteraction):
-    datetime_date: datetime.date | None = None
-    with sqlite3.connect(DB_LOC) as con:
-        try:
-            con.execute("INSERT INTO players(discord_id, name, discriminator, registration_date) VALUES (?, ?, ?, ?)",
-                        [inter.user.id, inter.user.name, inter.user.discriminator, str(datetime.date.today())])
-        except sqlite3.IntegrityError:
-            cur = con.execute("SELECT registration_date FROM players WHERE discord_id = ?", [inter.user.id])
-            date = cur.fetchone()[0]
-            datetime_date = datetime.date.fromisoformat(date)
+    registration = bot.register_player(inter.user)
     player_role = await bot.get_player_role(inter.guild)
     await inter.user.add_roles(player_role)
-    if datetime_date:
-        await inter.send(f"Looks like you registered back on {datetime_date:%x}", ephemeral=True)
+    if registration is True:
+        await inter.send("You're all registered!", ephemeral=True)
         return
-    await inter.send("You're all registered!", ephemeral=True)
+    registration_date = datetime.date.fromisoformat(registration['date'])
+    await inter.send(f"Looks like you registered back on {registration_date:%x}", ephemeral=True)
 
 
 @bot.slash_command(description="Lets you check your current rating. A rating of 1000 is average")
 async def rating(inter: disnake.AppCommandInteraction):
-    with sqlite3.connect(DB_LOC) as con:
-        try:
-            cur = con.execute("SELECT rating FROM players WHERE discord_id = ?", [inter.user.id])
-            player_rating = cur.fetchall()[0][0]
-        except IndexError:
-            await inter.send("Looks like you haven't registered yet. Use the /register command to register")
-            return
-    await inter.send(f"{inter.user.mention}, your current rating is {player_rating}")
+    try:
+        rating = bot.get_player_rating(inter.user)
+    except UserNotRegisteredError:
+        await inter.send("Looks like you haven't registered yet. Use the /register command to register")
+        return
+    await inter.send(f"{inter.user.mention}, your current rating is {rating}")
 
 
 @bot.slash_command()
@@ -258,6 +225,7 @@ async def test_update(inter: disnake.AppCommandInteraction):
         await inter.send("This is only for testing, and only my owner can use it.", ephemeral=True)
         return
     guild = bot.guilds[0]
+    # noinspection PyTypeChecker
     cog: quarterly_update.RandardMaintenanceCog = bot.get_cog("RandardMaintenanceCog")
     await cog.quarterly_update(guild)
 
