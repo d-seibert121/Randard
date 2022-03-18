@@ -1,5 +1,5 @@
 import unittest
-from RandardDiscordBot.decklist_verification import verify_decklist, decklist_parser
+from decklist_verification import verify_decklist, decklist_parser
 from collections import Counter
 import vcr
 

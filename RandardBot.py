@@ -5,8 +5,8 @@ import disnake
 import mtgsdk
 from disnake.ext import commands
 
-from RandardDiscordBot.APIutils import Set_name, Set_code
-from RandardDiscordBot.private_info import DB_PATH
+from APIutils import Set_name, Set_code
+from private_info import DB_PATH
 from format_chooser import generate_format
 
 

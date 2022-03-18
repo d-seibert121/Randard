@@ -5,8 +5,8 @@ import disnake
 from disnake.ext import commands
 
 import quarterly_update
-from RandardDiscordBot.RandardBot import RandardBot, UserNotRegisteredError
-from RandardDiscordBot.private_info import TOKEN
+from RandardBot import RandardBot, UserNotRegisteredError
+from private_info import TOKEN
 import decklist_verification
 
 

@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RandardDiscordBot/BotMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/BotMain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RandardDiscordBot/RandardBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/RandardBot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandardDiscordBot/block_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/block_management.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandardDiscordBot/decklist_verification.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/decklist_verification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandardDiscordBot/format_chooser.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardDiscordBot/format_chooser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +87,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RandardDiscordBot/BotMain.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\dseib\PycharmProjects\Randard\BotMain.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -127,7 +129,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\dseib\PycharmProjects\Randard\RandardDiscordBot\format_chooser.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\dseib\PycharmProjects\Randard\format_chooser.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -238,7 +240,14 @@
       <option name="project" value="LOCAL" />
       <updated>1647570604687</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Bugfixes&#10;Bot now no longer uses test_guilds and instead uses global registration.">
+      <created>1647584612593</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1647584612593</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -252,6 +261,7 @@
     <MESSAGE value="Redesigned the /game interface so as not to put buttons in front of users that can't use them. &#10;Now only shows the results of confirmed games to everyone, through the use of a read-only (but bot-writable) channel called match-results." />
     <MESSAGE value="Added the quarterly league maintenance. The bot will compile the previous season's leaderboard, store a copy of the leaderboard as a new table in the DB, generate a new format, and post the new format and leaderboard in the server's announcements channel.&#10;To facilitate the above change, a disnake Bot subclass, RandardBot was created in it's own module. This class has methods for fetching the necessary roles and channels from a specified guild.&#10;Reorganized most of the database handling into the new database_management.py. This module absorbed several functions from both Randard and RandardDiscordBot, plus most of the loose calls to the database have been wrapped in functions and put there." />
     <MESSAGE value="Major restructure. Removed the two different packages, now all the files are under the one RandardDiscordBot package.&#10;The previous database_management.py functions are now methods of the RandardBot class, and several more database-wrapper methods were added. The bot now uses a different database for each guild. These methods either require an explicit guild argument to determine which database to use, or derives the guild implicitly from a passed-in disnake.Member." />
-    <option name="LAST_COMMIT_MESSAGE" value="Major restructure. Removed the two different packages, now all the files are under the one RandardDiscordBot package.&#10;The previous database_management.py functions are now methods of the RandardBot class, and several more database-wrapper methods were added. The bot now uses a different database for each guild. These methods either require an explicit guild argument to determine which database to use, or derives the guild implicitly from a passed-in disnake.Member." />
+    <MESSAGE value="Bugfixes&#10;Bot now no longer uses test_guilds and instead uses global registration." />
+    <option name="LAST_COMMIT_MESSAGE" value="Bugfixes&#10;Bot now no longer uses test_guilds and instead uses global registration." />
   </component>
 </project>

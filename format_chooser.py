@@ -4,7 +4,7 @@ from random import sample, randint
 
 import mtgsdk
 
-from RandardDiscordBot.APIutils import ALL_TRUE_SETS
+from APIutils import ALL_TRUE_SETS
 
 
 def generate_format(format_size=None) -> list[mtgsdk.Set]:
