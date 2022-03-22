@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Randard.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Randard.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BotMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/BotMain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RandardBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardBot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database.ini" beforeDir="false" afterPath="$PROJECT_DIR$/database.ini" afterDir="false" />
     </list>
     <list id="d20fc2cd-ac6a-4f19-baa1-bf62e9cfa545" name="Prep for switching to PostgreSQL" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,36 +18,17 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="master" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitSEFilterConfiguration">
-    <file-type-list>
-      <filtered-out-file-type name="LOCAL_BRANCH" />
-      <filtered-out-file-type name="REMOTE_BRANCH" />
-      <filtered-out-file-type name="TAG" />
-      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
-    </file-type-list>
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="OptimizeOnSaveOptions">
-    <option name="myRunOnSave" value="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
-  <component name="ProjectId" id="25ya4JfmpU0taZphFAesS1MsCq4" />
+  <component name="ProjectId" id="26jVCWhakZ8YfteWrIclCPuzrv2" />
   <component name="ProjectViewState">
     <option name="foldersAlwaysOnTop" value="false" />
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -56,29 +38,9 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="tasks.servers" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/venv/Lib/site-packages/psycopg2/sql.py" />
   </component>
-  <component name="PyConsoleOptionsProvider">
-    <option name="myPythonConsoleState">
-      <console-settings module-name="Randard" is-module-sdk="true">
-        <option name="myUseModuleSdk" value="true" />
-        <option name="myModuleName" value="Randard" />
-      </console-settings>
-    </option>
-  </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\dseib\PycharmProjects\Randard\server_databases" />
-      <recent name="C:\Users\dseib\PycharmProjects\Randard" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\dseib\PycharmProjects\Randard" />
-      <recent name="C:\Users\dseib\PycharmProjects\Randard\RandardDiscordBot" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Python.BotMain">
+  <component name="RunManager">
     <configuration name="BotMain" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Randard" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,95 +49,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RandardDiscordBot" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\dseib\PycharmProjects\Randard\BotMain.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Randard" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/__init__.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="format_chooser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Randard" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Randard" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\dseib\PycharmProjects\Randard\format_chooser.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test_file" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Randard" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_file.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/BotMain.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -187,9 +65,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.BotMain" />
-        <item itemvalue="Python.test_file" />
-        <item itemvalue="Python.__init__" />
-        <item itemvalue="Python.format_chooser" />
       </list>
     </recent_temporary>
   </component>
@@ -197,92 +72,11 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="" />
-      <changelist id="d20fc2cd-ac6a-4f19-baa1-bf62e9cfa545" name="Prep for switching to PostgreSQL" comment="" />
-      <created>1646501591900</created>
+      <created>1647936857256</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1646501591900</updated>
+      <updated>1647936857256</updated>
     </task>
-    <task id="LOCAL-00001" summary="fixing .idea">
-      <created>1646503983312</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1646503983312</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Switched to using sqlite3 instead of json to keep track of current sets.&#10;Added player-facing functionality, including player registration and player ratings which can be updated by recording game results&#10;Moved scryfall_search into APIutils">
-      <created>1647150140418</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1647150140418</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Added some helper functions for working with the database, in line with DRY&#10;/register now adds a 'player' role to the registered member, adding the role to the guild if necessary&#10;A number of functions now take discord.Member parameters instead of discord.User, since I care about roles now.&#10;Moved all the Typing types to APIutils.py">
-      <created>1647303747710</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1647303747710</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Redesigned the /game interface so as not to put buttons in front of users that can't use them. &#10;Now only shows the results of confirmed games to everyone, through the use of a read-only (but bot-writable) channel called match-results.">
-      <created>1647310292591</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1647310292591</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Added the quarterly league maintenance. The bot will compile the previous season's leaderboard, store a copy of the leaderboard as a new table in the DB, generate a new format, and post the new format and leaderboard in the server's announcements channel.&#10;To facilitate the above change, a disnake Bot subclass, RandardBot was created in it's own module. This class has methods for fetching the necessary roles and channels from a specified guild.&#10;Reorganized most of the database handling into the new database_management.py. This module absorbed several functions from both Randard and RandardDiscordBot, plus most of the loose calls to the database have been wrapped in functions and put there.">
-      <created>1647532409735</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1647532409735</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Major restructure. Removed the two different packages, now all the files are under the one RandardDiscordBot package.&#10;The previous database_management.py functions are now methods of the RandardBot class, and several more database-wrapper methods were added. The bot now uses a different database for each guild. These methods either require an explicit guild argument to determine which database to use, or derives the guild implicitly from a passed-in disnake.Member.">
-      <created>1647570604687</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1647570604687</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Bugfixes&#10;Bot now no longer uses test_guilds and instead uses global registration.">
-      <created>1647584612593</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1647584612593</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Flattened directory structure due to no longer having two packages">
-      <created>1647586874505</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1647586874505</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Added Procfile and runtime.txt for heroku">
-      <created>1647588441291</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1647588441291</updated>
-    </task>
-    <option name="localTasksCounter" value="10" />
     <servers />
-  </component>
-  <component name="UnknownFeatures">
-    <option featureType="com.intellij.fileTypeFactory" implementationName="*.bat" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixing .idea" />
-    <MESSAGE value="Switched to using sqlite3 instead of json to keep track of current sets.&#10;Added player-facing functionality, including player registration and player ratings which can be updated by recording game results&#10;Moved scryfall_search into APIutils" />
-    <MESSAGE value="\scryfall now responds with a url to scryfall that searches for the currently legal sets, instead of making the user copy-paste the search string into scryfall themselves&#10;\verify now calls inter.response.defer, because it took *just* over 3 seconds to respond, which was causing a timeout&#10;\register now responds with an ephemeral confirmation&#10;Began work on a quarterly_update task that will do all the season maintenance" />
-    <MESSAGE value="Added some helper functions for working with the database, in line with DRY&#10;/register now adds a 'player' role to the registered member, adding the role to the guild if necessary&#10;A number of functions now take discord.Member parameters instead of discord.User, since I care about roles now.&#10;Moved all the Typing types to APIutils.py" />
-    <MESSAGE value="Redesigned the /game interface so as not to put buttons in front of users that can't use them. &#10;Now only shows the results of confirmed games to everyone, through the use of a read-only (but bot-writable) channel called match-results." />
-    <MESSAGE value="Added the quarterly league maintenance. The bot will compile the previous season's leaderboard, store a copy of the leaderboard as a new table in the DB, generate a new format, and post the new format and leaderboard in the server's announcements channel.&#10;To facilitate the above change, a disnake Bot subclass, RandardBot was created in it's own module. This class has methods for fetching the necessary roles and channels from a specified guild.&#10;Reorganized most of the database handling into the new database_management.py. This module absorbed several functions from both Randard and RandardDiscordBot, plus most of the loose calls to the database have been wrapped in functions and put there." />
-    <MESSAGE value="Major restructure. Removed the two different packages, now all the files are under the one RandardDiscordBot package.&#10;The previous database_management.py functions are now methods of the RandardBot class, and several more database-wrapper methods were added. The bot now uses a different database for each guild. These methods either require an explicit guild argument to determine which database to use, or derives the guild implicitly from a passed-in disnake.Member." />
-    <MESSAGE value="Bugfixes&#10;Bot now no longer uses test_guilds and instead uses global registration." />
-    <MESSAGE value="Flattened directory structure due to no longer having two packages" />
-    <MESSAGE value="Added Procfile and runtime.txt for heroku" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Procfile and runtime.txt for heroku" />
   </component>
 </project>

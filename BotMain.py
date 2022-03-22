@@ -6,7 +6,6 @@ from disnake.ext import commands
 
 import quarterly_update
 from RandardBot import RandardBot, UserNotRegisteredError
-from private_info import TOKEN
 import decklist_verification
 
 
@@ -229,4 +228,4 @@ async def rating(inter: disnake.AppCommandInteraction):
 #     cog: quarterly_update.RandardMaintenanceCog = bot.get_cog("RandardMaintenanceCog")
 #     await cog.quarterly_update(guild)
 
-bot.run(TOKEN)
+bot.run(bot.config['bot']['token'])
