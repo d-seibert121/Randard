@@ -60,7 +60,7 @@ class RandardBot(commands.Bot):
             # find what tables the schema has, so we can create players and seasons if necessary
             cur.execute(f"SELECT * FROM pg_tables WHERE schemaname=%s", [f"server_{guild.id}"])
             tables: list[psycopg2.extras.DictRow] = cur.fetchall()
-            table_names: list[str] = [table['name'] for table in tables]
+            table_names: list[str] = [table['tablename'] for table in tables]
 
             if 'players' not in table_names:
                 # only creates the table, it must be populated by players using the /register command
