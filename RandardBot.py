@@ -9,6 +9,8 @@ from APIutils import Set_name, Set_code
 from private_info import DB_PATH
 from format_chooser import generate_format
 
+import psycopg2
+
 
 class UserNotRegisteredError(sqlite3.DatabaseError):
     pass
@@ -56,10 +58,10 @@ class RandardBot(commands.Bot):
                 await announcements_channel.send(announcement_header + format_message + signoff)
 
     @staticmethod
-    def _database_for(guild: disnake.Guild) -> str:
+    def _database_for(guild: disnake.Guild) -> sqlite3.Connection:
         """Returns the filepath to the server-specific database for the given server.
         """
-        return f"{DB_PATH}Randard_{guild.id}.db"
+        return sqlite3.connect(f"{DB_PATH}Randard_{guild.id}.db")
 
     @staticmethod
     async def get_player_role(guild: disnake.Guild) -> disnake.Role:
@@ -89,7 +91,7 @@ class RandardBot(commands.Bot):
 
     def register_player(self, member: disnake.Member) -> bool | sqlite3.Row:
         datetime_date: datetime.date | None = None
-        with sqlite3.connect(self._database_for(member.guild)) as con:
+        with self._database_for(member.guild) as con:
             con.row_factory = sqlite3.Row
             try:
                 con.execute(
@@ -107,19 +109,19 @@ class RandardBot(commands.Bot):
         today = datetime.date.today()
         names = self.names_string(mtg_format)
         codes = self.codes_string(mtg_format)
-        with sqlite3.connect(self._database_for(guild)) as con:
+        with self._database_for(guild) as con:
             con.execute("INSERT INTO seasons(month, year, set_names, set_codes) VALUES (?, ?, ?, ?)", [f"{today:%B}", today.year, names, codes])
 
     def update_player_rating(self, player: disnake.Member, new_rating: int):
         """Update's a player's entry in the database with a new rating"""
-        with sqlite3.connect(self._database_for(player.guild)) as con:
+        with self._database_for(player.guild) as con:
             cur = con.execute("UPDATE players SET rating=? WHERE discord_id=?", [player.id])
             if cur.rowcount == 0:
                 raise UserNotRegisteredError(f"The player {player.name} with id {player.id} is not registered in the database.")
 
     def _get_player(self, player: disnake.Member) -> sqlite3.Row:
         """Fetches a player row from the bots database"""
-        with sqlite3.connect(self._database_for(player.guild)) as con:
+        with self._database_for(player.guild) as con:
             con.row_factory = sqlite3.Row
             player_row = con.execute("SELECT * FROM players WHERE discord_id=?", [player.id]).fetchone()
             if player_row:
@@ -134,7 +136,7 @@ class RandardBot(commands.Bot):
         Each element of the returned list is a sqlite3.Row object representing a player, with discord_id and rating keys.
         Players are returned in standing order, with the champion at index 0, runner-up at index 1, etc.
         """
-        with sqlite3.connect(self._database_for(guild)) as con:
+        with self._database_for(guild) as con:
             con.row_factory = sqlite3.Row
             cur = con.execute("SELECT discord_id, rating FROM players ORDER BY rating DESC")
             leaderboard = cur.fetchmany(10)
@@ -143,7 +145,7 @@ class RandardBot(commands.Bot):
     def store_leaderboard(self, guild: disnake.Guild) -> list[sqlite3.Row]:
         """Creates a new table in the database storing the leaderboard for a particular season, storing the discord id and rating of the top 10 players
         Returns a list of the 10 players, as they exist in the players table, in order from 1st place to 10th"""
-        with sqlite3.connect(self._database_for(guild)) as con:
+        with self._database_for(guild) as con:
             con.row_factory = sqlite3.Row
             completed_season = con.execute("SELECT * FROM seasons ORDER BY CAST(season_number AS REAL) DESC").fetchone()
             leaderboard_table_name = f"leaderboard_{completed_season['month']}_{completed_season['year']}"
@@ -155,11 +157,11 @@ class RandardBot(commands.Bot):
             return leaderboard
 
     def clear_ratings(self, guild: disnake.Guild):
-        with sqlite3.connect(self._database_for(guild)) as con:
+        with self._database_for(guild) as con:
             con.execute("UPDATE players SET rating=1000")
 
     def get_current_season(self, guild: disnake.Guild) -> sqlite3.Row:
-        with sqlite3.connect(self._database_for(guild)) as con:
+        with self._database_for(guild) as con:
             con.row_factory = sqlite3.Row
             return con.execute("SELECT * FROM seasons ORDER BY CAST(season_number AS REAL) DESC").fetchone()
 
