@@ -9,13 +9,18 @@ import psycopg2
 import psycopg2.extras
 import psycopg2.extensions
 import psycopg2.sql
+import psycopg2.errors
 from disnake.ext import commands
 
 from APIutils import Set_name, Set_code
 from format_chooser import generate_format
 
 
-class UserNotRegisteredError(psycopg2.DatabaseError):
+class UserNotRegisteredError(Exception):
+    pass
+
+
+class DuplicateRegistrationError(Exception):
     pass
 
 
@@ -65,7 +70,7 @@ class RandardBot(commands.Bot):
             if 'players' not in table_names:
                 # only creates the table, it must be populated by players using the /register command
                 table_name = psycopg2.sql.Identifier(schema_name, "players")
-                players_create_sql = psycopg2.sql.SQL("CREATE TABLE {}(discord_id TEXT UNIQUE, name TEXT, discriminator TEXT, registration_date TEXT, rating INT DEFAULT 1000, last_game TEXT DEFAULT null)")
+                players_create_sql = psycopg2.sql.SQL("CREATE TABLE {}(discord_id BIGINT UNIQUE, name TEXT, discriminator TEXT, registration_date TEXT, rating INT DEFAULT 1000, last_game TEXT DEFAULT null)")
                 cur.execute(players_create_sql.format(table_name))
 
             if 'seasons' not in table_names:
@@ -143,9 +148,10 @@ class RandardBot(commands.Bot):
                 cur.execute(
                     "INSERT INTO players(discord_id, name, discriminator, registration_date) VALUES (%s, %s, %s, %s)",
                     [member.id, member.name, member.discriminator, str(datetime.date.today())])
-            except psycopg2.IntegrityError:
+            except psycopg2.errors.UniqueViolation:
                 cur.execute("SELECT * FROM players WHERE discord_id = %s", [member.id])
-                return cur.fetchone()
+                player = cur.fetchone
+                raise DuplicateRegistrationError("Player already registered on date: ", player['registration_date'])
         return True
 
     def store_format(self, mtg_format: list[mtgsdk.Set], guild: disnake.Guild):

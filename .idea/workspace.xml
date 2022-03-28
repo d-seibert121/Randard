@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="">
+    <list default="true" id="a9ba33c5-b1ea-4345-9ee7-30790f2430cd" name="Changes" comment="Fixing typo in RandardBot._setup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.ini" beforeDir="false" afterPath="$PROJECT_DIR$/database.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BotMain.py" beforeDir="false" afterPath="$PROJECT_DIR$/BotMain.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandardBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/RandardBot.py" afterDir="false" />
     </list>
     <list id="d20fc2cd-ac6a-4f19-baa1-bf62e9cfa545" name="Prep for switching to PostgreSQL" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -80,11 +81,19 @@
       <option name="project" value="LOCAL" />
       <updated>1647952914710</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fixing typo in RandardBot._setup">
+      <created>1647955855417</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1647955855418</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updating to deploy to heroku" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updating to deploy to heroku" />
+    <MESSAGE value="Fixing typo in RandardBot._setup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing typo in RandardBot._setup" />
   </component>
 </project>

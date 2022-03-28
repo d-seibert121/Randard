@@ -5,7 +5,7 @@ import disnake
 from disnake.ext import commands
 
 import quarterly_update
-from RandardBot import RandardBot, UserNotRegisteredError
+from RandardBot import RandardBot, UserNotRegisteredError, DuplicateRegistrationError
 import decklist_verification
 
 
@@ -198,24 +198,24 @@ async def game_command(inter: disnake.AppCommandInteraction,
 
 @bot.slash_command(description="Registers you to the Randard league")
 async def register(inter: disnake.AppCommandInteraction):
-    registration = bot.register_player(inter.user)
+    try:
+        bot.register_player(inter.user)
+    except DuplicateRegistrationError as err:
+        registration_date = datetime.date.fromisoformat(err.args[1])
+        await inter.send(f"Looks like you registered back on {registration_date:%x}", ephemeral=True)
     player_role = await bot.get_player_role(inter.guild)
     await inter.user.add_roles(player_role)
-    if registration is True:
-        await inter.send("You're all registered!", ephemeral=True)
-        return
-    registration_date = datetime.date.fromisoformat(registration['registration_date'])
-    await inter.send(f"Looks like you registered back on {registration_date:%x}", ephemeral=True)
+    await inter.send("You're all registered!", ephemeral=True)
 
 
 @bot.slash_command(description="Lets you check your current rating. A rating of 1000 is average")
 async def rating(inter: disnake.AppCommandInteraction):
     try:
-        rating = bot.get_player_rating(inter.user)
+        player_rating = bot.get_player_rating(inter.user)
     except UserNotRegisteredError:
         await inter.send("Looks like you haven't registered yet. Use the /register command to register")
         return
-    await inter.send(f"{inter.user.mention}, your current rating is {rating}")
+    await inter.send(f"{inter.user.mention}, your current rating is {player_rating}")
 
 
 # @bot.slash_command()
